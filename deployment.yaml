@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tierapp  # Corrected: Lowercase alphanumeric
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: tierapp
+  template:
+    metadata:
+      labels:
+        app: tierapp
+    spec:
+      containers:
+      - name: frontend-c  # Corrected: Lowercase, no special characters
+        image: xphenomenal/frontimage
+        ports:
+        - containerPort: 5173
+      - name: database-c  # Corrected: Lowercase, no special characters
+        image: mongo:latest
+        ports:
+        - containerPort: 27017
+        volumeMounts:
+        - name: myvol
+          mountPath: /data/db  # MongoDB's default data directory
+      - name: backend-c  # Corrected: Lowercase, no special characters
+        image: xphenomenal/backimage
+        ports:
+        - containerPort: 5050
+      volumes:
+      - name: myvol
+        emptyDir: {}  # Using emptyDir instead of PersistentVolumeClaim
